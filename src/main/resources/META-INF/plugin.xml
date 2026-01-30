@@ -1,0 +1,87 @@
+<idea-plugin>
+    <id>com.aiclient.intellij</id>
+    <name>AI Client</name>
+    <vendor email="support@example.com" url="https://example.com">AI Client Team</vendor>
+
+    <description><![CDATA[
+    <p>An intelligent AI assistant integrated directly into IntelliJ IDEA.</p>
+    <h3>Features:</h3>
+    <ul>
+        <li><b>AI Chat Panel</b> - Have conversations with AI about your code</li>
+        <li><b>Code Assistance</b> - Get explanations, improvements, and documentation for selected code</li>
+        <li><b>Multiple Providers</b> - Support for OpenAI, Anthropic, and custom endpoints</li>
+        <li><b>Streaming Responses</b> - Real-time display of AI responses</li>
+    </ul>
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Tool Window for AI Chat -->
+        <toolWindow id="AI Chat" 
+                    anchor="right" 
+                    icon="AllIcons.Actions.Lightning"
+                    factoryClass="com.aiclient.ui.AiChatToolWindowFactory"/>
+
+        <!-- Application-level Settings -->
+        <applicationService serviceImplementation="com.aiclient.settings.AiClientSettings"/>
+        
+        <!-- Settings Configurable Panel -->
+        <applicationConfigurable parentId="tools"
+                                 instance="com.aiclient.settings.AiClientSettingsConfigurable"
+                                 id="com.aiclient.settings.AiClientSettingsConfigurable"
+                                 displayName="AI Client"/>
+        
+        <!-- Project-level AI Service -->
+        <projectService serviceImplementation="com.aiclient.service.AiClientService"/>
+        
+        <!-- Notification Group -->
+        <notificationGroup id="AI Client Notifications" 
+                           displayType="BALLOON"/>
+    </extensions>
+
+    <actions>
+        <!-- AI Assist Actions Group -->
+        <group id="AiClient.EditorGroup" 
+               text="AI Assistant" 
+               popup="true"
+               icon="AllIcons.Actions.Lightning">
+            
+            <action id="AiClient.ExplainCode"
+                    class="com.aiclient.action.ExplainCodeAction"
+                    text="Explain Code"
+                    description="Ask AI to explain the selected code"
+                    icon="AllIcons.Actions.Help"/>
+            
+            <action id="AiClient.ImproveCode"
+                    class="com.aiclient.action.ImproveCodeAction"
+                    text="Improve Code"
+                    description="Ask AI to suggest improvements for the selected code"
+                    icon="AllIcons.Actions.SuggestedRefactoringBulb"/>
+            
+            <action id="AiClient.GenerateDocs"
+                    class="com.aiclient.action.GenerateDocsAction"
+                    text="Generate Documentation"
+                    description="Ask AI to generate documentation for the selected code"
+                    icon="AllIcons.FileTypes.Text"/>
+            
+            <action id="AiClient.AskAboutCode"
+                    class="com.aiclient.action.AskAboutCodeAction"
+                    text="Ask About Code..."
+                    description="Ask a custom question about the selected code"
+                    icon="AllIcons.Actions.Find"/>
+            
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </group>
+        
+        <!-- Keyboard Shortcut Action -->
+        <action id="AiClient.QuickAsk"
+                class="com.aiclient.action.QuickAskAction"
+                text="AI Quick Ask"
+                description="Quickly ask AI about selected code">
+            <keyboard-shortcut keymap="$default" first-keystroke="control alt A"/>
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>

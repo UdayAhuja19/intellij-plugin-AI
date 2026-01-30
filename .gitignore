@@ -1,0 +1,15 @@
+# Gradle
+.gradle/
+build/
+gradle-*-bin.zip
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# OS
+.DS_Store
+
+# Local config
+local.properties
