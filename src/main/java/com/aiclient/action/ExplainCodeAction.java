@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 
 /**
- * Action to ask the AI Chat to explain the selected code.
+ * Action to ask the FocusFlow Chat to explain the selected code.
  */
 public class ExplainCodeAction extends AnAction {
 
@@ -49,7 +49,7 @@ public class ExplainCodeAction extends AnAction {
         tabManager.focusChatTab(); // Ensures tool window is visible and Chat tab is selected
         
         // 3. Find ChatPanel instance (Robust search)
-        ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow("AI Chat");
+        ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow("FocusFlow");
         if (toolWindow != null) {
             ChatPanel chatPanel = null;
             
@@ -70,7 +70,7 @@ public class ExplainCodeAction extends AnAction {
                     finalChatPanel.handleUserMessage(prompt);
                 });
             } else {
-                Messages.showErrorDialog("Could not find AI Chat panel. Please try closing/reopening the tool window.", "Error");
+                Messages.showErrorDialog("Could not find FocusFlow Chat panel. Please try closing/reopening the tool window.", "Error");
             }
         }
     }

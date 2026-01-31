@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * A panel that shows code diff with red/green highlighting,
- * an AI chat panel for follow-up questions, and an Apply button.
+ * a FocusFlow chat panel for follow-up questions, and an Apply button.
  * Designed to be used as a tab content.
  */
 public class CodeDiffPanel extends JPanel {

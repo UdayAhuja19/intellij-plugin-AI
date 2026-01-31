@@ -15,7 +15,7 @@ import javax.swing.*;
 public final class AiTabManager {
     
     private final Project project;
-    private static final String TOOL_WINDOW_ID = "AI Chat";
+    private static final String TOOL_WINDOW_ID = "FocusFlow";
     
     public AiTabManager(Project project) {
         this.project = project;

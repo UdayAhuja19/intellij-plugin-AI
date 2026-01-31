@@ -256,7 +256,7 @@ public class ChatPanel extends JPanel {
         header.setBackground(bgMain);
         header.setBorder(JBUI.Borders.empty(16, 20));
         
-        JLabel title = new JLabel("AI Assistant");
+        JLabel title = new JLabel("FocusFlow");
         title.setFont(UIUtil.getLabelFont().deriveFont(Font.BOLD, 17f));
         title.setForeground(textDark);
         
@@ -281,7 +281,7 @@ public class ChatPanel extends JPanel {
         add(inputContainer, BorderLayout.SOUTH);
         
         // Welcome
-        addAiMessage("Hi! I'm your AI coding assistant. Ask me anything about your code.\n\nUse Ctrl+Enter to send.");
+        addAiMessage("Hi! I'm FocusFlow, your coding assistant. Ask me anything about your code.\n\nUse Ctrl+Enter to send.");
     }
     
     // ========================================================================

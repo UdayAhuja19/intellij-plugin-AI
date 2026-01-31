@@ -248,11 +248,15 @@ public final class AiClientService {
                 messages.add(new ChatMessage("user", 
                     prompt + "\n\n```\n" + code + "\n```"));
                 
+                // Enforce a minimum token limit for code analysis to prevent truncation
+                // even if user settings are low.
+                int effectiveMaxTokens = Math.max(settings.maxTokens, 4096);
+                
                 ChatRequest chatRequest = new ChatRequest(
                     settings.model,
                     messages,
                     0.3,  // Lower temperature for code analysis
-                    settings.maxTokens,
+                    effectiveMaxTokens,
                     false
                 );
                 

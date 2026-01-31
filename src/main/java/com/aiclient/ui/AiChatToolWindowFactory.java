@@ -9,9 +9,9 @@ import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Factory for creating the AI Chat tool window.
+ * Factory for creating the FocusFlow tool window.
  * 
- * This class is registered in plugin.xml as the factory for the "AI Assistant"
+ * This class is registered in plugin.xml as the factory for the "FocusFlow"
  * tool window. When the user opens the tool window, IntelliJ calls
  * createToolWindowContent() to populate it with our ChatPanel.
  * 
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
  * 
  * Registration in plugin.xml:
  * <pre>
- * &lt;toolWindow id="AI Assistant"
+ * &lt;toolWindow id="FocusFlow"
  *             secondary="true"
  *             anchor="right"
  *             factoryClass="com.aiclient.ui.AiChatToolWindowFactory"/&gt;

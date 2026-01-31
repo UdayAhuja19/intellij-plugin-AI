@@ -1,13 +1,13 @@
 <idea-plugin>
     <id>com.aiclient.intellij</id>
-    <name>AI Client</name>
-    <vendor email="support@example.com" url="https://example.com">AI Client Team</vendor>
+    <name>FocusFlow</name>
+    <vendor email="support@example.com" url="https://example.com">FocusFlow Team</vendor>
 
     <description><![CDATA[
-    <p>An intelligent AI assistant integrated directly into IntelliJ IDEA.</p>
+    <p>FocusFlow: An intelligent coding assistant integrated directly into IntelliJ IDEA.</p>
     <h3>Features:</h3>
     <ul>
-        <li><b>AI Chat Panel</b> - Have conversations with AI about your code</li>
+        <li><b>FocusFlow Chat</b> - Have conversations with AI about your code</li>
         <li><b>Code Assistance</b> - Get explanations, improvements, and documentation for selected code</li>
         <li><b>Multiple Providers</b> - Support for OpenAI, Anthropic, and custom endpoints</li>
         <li><b>Streaming Responses</b> - Real-time display of AI responses</li>
@@ -18,8 +18,8 @@
     <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Tool Window for AI Chat -->
-        <toolWindow id="AI Chat" 
+        <!-- Tool Window for FocusFlow -->
+        <toolWindow id="FocusFlow" 
                     anchor="right" 
                     icon="AllIcons.Actions.Lightning"
                     factoryClass="com.aiclient.ui.AiChatToolWindowFactory"/>
@@ -31,20 +31,20 @@
         <applicationConfigurable parentId="tools"
                                  instance="com.aiclient.settings.AiClientSettingsConfigurable"
                                  id="com.aiclient.settings.AiClientSettingsConfigurable"
-                                 displayName="AI Client"/>
+                                 displayName="FocusFlow"/>
         
         <!-- Project-level AI Service -->
         <projectService serviceImplementation="com.aiclient.service.AiClientService"/>
         
         <!-- Notification Group -->
-        <notificationGroup id="AI Client Notifications" 
+        <notificationGroup id="FocusFlow Notifications" 
                            displayType="BALLOON"/>
     </extensions>
 
     <actions>
         <!-- AI Assist Actions Group -->
         <group id="AiClient.EditorGroup" 
-               text="AI Assistant" 
+               text="FocusFlow" 
                popup="true"
                icon="AllIcons.Actions.Lightning">
             
@@ -58,12 +58,18 @@
                     text="What Am I Doing?" description="Analyze code context to summarize current task">
             </action>
             
+            <action id="AiClient.DetectErrors" class="com.aiclient.action.DetectErrorsAction"
+                    text="Detect Errors" description="Find bugs and get hints or solution">
+            </action>
+            
             <action id="AiClient.ImproveCode"
                     class="com.aiclient.action.ImproveCodeAction"
                     text="Improve Code"
                     description="Ask AI to suggest improvements for the selected code"
                     icon="AllIcons.Actions.SuggestedRefactoringBulb"/>
             
+            <reference id="AiClient.DetectErrors"/>
+            <separator/>
             <reference id="AiClient.WhatAmIDoing"/>
             <separator/>
             
@@ -85,8 +91,8 @@
         <!-- Keyboard Shortcut Action -->
         <action id="AiClient.QuickAsk"
                 class="com.aiclient.action.QuickAskAction"
-                text="AI Quick Ask"
-                description="Quickly ask AI about selected code">
+                text="FocusFlow Quick Ask"
+                description="Quickly ask FocusFlow about selected code">
             <keyboard-shortcut keymap="$default" first-keystroke="control alt A"/>
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
