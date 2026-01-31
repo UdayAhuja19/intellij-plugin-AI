@@ -116,7 +116,7 @@ public class LinkedInPostPanel extends JPanel {
             
             new Thread(() -> {
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(7000);
                     
                     Robot robot = new Robot();
                     robot.setAutoDelay(100);
@@ -138,7 +138,7 @@ public class LinkedInPostPanel extends JPanel {
             }).start();
             
             Messages.showInfoMessage(project, 
-                "<html>Opening LinkedIn...<br><b>Auto-Pasting in 3 seconds...</b></html>", 
+                "<html>Opening LinkedIn...<br><b>Auto-Pasting in 7 seconds...</b></html>", 
                 "LinkedIn Ready");
                 
         } catch (Exception e) {
