@@ -54,12 +54,17 @@
                     description="Ask AI to explain the selected code"
                     icon="AllIcons.Actions.Help"/>
             
+            <action id="AiClient.WhatAmIDoing" class="com.aiclient.action.WhatAmIDoingAction"
+                    text="What Am I Doing?" description="Analyze code context to summarize current task">
+            </action>
+            
             <action id="AiClient.ImproveCode"
                     class="com.aiclient.action.ImproveCodeAction"
                     text="Improve Code"
                     description="Ask AI to suggest improvements for the selected code"
                     icon="AllIcons.Actions.SuggestedRefactoringBulb"/>
             
+            <reference id="AiClient.WhatAmIDoing"/>
             <separator/>
             
             <action id="AiClient.GenerateBlogPost"
