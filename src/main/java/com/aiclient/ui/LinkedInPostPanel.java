@@ -3,7 +3,6 @@ package com.aiclient.ui;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.components.JBTextArea;
 import com.intellij.util.ui.JBUI;
@@ -12,23 +11,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 /**
- * A panel that shows a generated LinkedIn post.
- * Features a dark theme, copy button, and "Open LinkedIn" button.
+ * Panel for LinkedIn post generation.
+ * Uses modern UI styling with rounded boxes and blue outlined buttons.
  */
 public class LinkedInPostPanel extends JPanel {
     
     private final Project project;
     private final String postContent;
     private final String codeSnippet;
-
-    // UI Colors - Matching ChatPanel/CodeDiffPanel
-    private static final Color DARK_BG = new JBColor(new Color(30, 30, 30), new Color(30, 30, 30));
-    private static final Color ACCENT_BLUE = new JBColor(new Color(0, 122, 255), new Color(10, 132, 255));
-    private static final Color TEXT_COLOR = new JBColor(Color.WHITE, Color.WHITE);
     
     public LinkedInPostPanel(Project project, String postContent, String codeSnippet) {
         super(new BorderLayout());
@@ -40,80 +32,73 @@ public class LinkedInPostPanel extends JPanel {
     }
     
     private void initUI() {
-        setBorder(JBUI.Borders.empty(16));
-        setBackground(DARK_BG);
+        setBackground(UIStyles.DARK_BG);
+        setBorder(JBUI.Borders.empty(20));
         
-        // Top: Heading & Close
-        JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBackground(DARK_BG);
-        topPanel.setBorder(JBUI.Borders.emptyBottom(16));
+        // Main container with rounded border
+        JPanel mainContainer = new JPanel(new BorderLayout(0, 16));
+        mainContainer.setBackground(UIStyles.DARK_BG);
+        mainContainer.setBorder(UIStyles.createRoundedBorder(20));
         
-        JLabel titleLabel = new JLabel("LinkedIn Post Draft");
-        titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD, 18f));
-        titleLabel.setForeground(TEXT_COLOR);
+        // Header
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setOpaque(false);
         
-        JButton closeButton = new JButton("Discard");
-        closeButton.addActionListener(e -> closeTab());
-        closeButton.setForeground(Color.GRAY);
-        closeButton.setContentAreaFilled(false);
-        closeButton.setBorderPainted(false);
-        closeButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        JLabel titleLabel = UIStyles.createTitle("LinkedIn Post Draft");
         
-        topPanel.add(titleLabel, BorderLayout.WEST);
-        topPanel.add(closeButton, BorderLayout.EAST);
+        JButton discardBtn = UIStyles.createGhostButton("Discard");
+        discardBtn.addActionListener(e -> closeTab());
         
-        add(topPanel, BorderLayout.NORTH);
+        headerPanel.add(titleLabel, BorderLayout.WEST);
+        headerPanel.add(discardBtn, BorderLayout.EAST);
         
-        // Center: Post Content
-        // Combine post content with code snippet
+        // Content - Text area in rounded box
         String fullContent = postContent + "\n\n" + codeSnippet;
+        
+        JPanel textContainer = new UIStyles.RoundedPanel(UIStyles.CORNER_RADIUS);
+        textContainer.setBackground(UIStyles.CARD_BG);
+        textContainer.setLayout(new BorderLayout());
+        textContainer.setBorder(JBUI.Borders.empty(16));
         
         JBTextArea textArea = new JBTextArea(fullContent);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
-        textArea.setEditable(true); // Allow user to tweak
-        textArea.setBackground(new Color(45, 45, 48));
-        textArea.setForeground(TEXT_COLOR);
+        textArea.setEditable(true);
+        textArea.setBackground(UIStyles.CARD_BG);
+        textArea.setForeground(UIStyles.TEXT_PRIMARY);
         textArea.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        textArea.setBorder(JBUI.Borders.empty(12));
-        textArea.setCaretColor(ACCENT_BLUE);
+        textArea.setBorder(JBUI.Borders.empty());
+        textArea.setCaretColor(UIStyles.ACCENT_BLUE);
         
         JBScrollPane scrollPane = new JBScrollPane(textArea);
         scrollPane.setBorder(JBUI.Borders.empty());
-        scrollPane.setBackground(DARK_BG);
+        scrollPane.getViewport().setBackground(UIStyles.CARD_BG);
         
-        // Container for text area with rounded border look (simulated)
-        JPanel textContainer = new JPanel(new BorderLayout());
-        textContainer.setBackground(DARK_BG);
-        textContainer.setBorder(JBUI.Borders.customLine(new Color(60, 60, 60), 1));
         textContainer.add(scrollPane, BorderLayout.CENTER);
         
-        add(textContainer, BorderLayout.CENTER);
-        
-        // Bottom: Action Buttons
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        // Bottom buttons  
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 12, 0));
         buttonPanel.setOpaque(false);
         buttonPanel.setBorder(JBUI.Borders.emptyTop(16));
         
-        JButton copyButton = new JButton("Copy Text");
-        copyButton.setForeground(Color.GRAY);
-        copyButton.setContentAreaFilled(false);
-        copyButton.setBorderPainted(false);
-        copyButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        copyButton.addActionListener(e -> copyToClipboard(textArea.getText()));
+        JButton copyBtn = UIStyles.createGhostButton("Copy Text");
+        copyBtn.addActionListener(e -> copyToClipboard(textArea.getText()));
         
-        JButton openButton = new OutlinedButton("Open LinkedIn", ACCENT_BLUE);
-        openButton.setPreferredSize(new Dimension(140, 36));
-        openButton.addActionListener(e -> openLinkedIn(textArea.getText()));
+        JButton openBtn = UIStyles.createOutlinedButton("Open LinkedIn");
+        openBtn.addActionListener(e -> openLinkedIn(textArea.getText()));
         
-        buttonPanel.add(copyButton);
-        buttonPanel.add(openButton);
+        buttonPanel.add(copyBtn);
+        buttonPanel.add(openBtn);
         
-        add(buttonPanel, BorderLayout.SOUTH);
+        mainContainer.add(headerPanel, BorderLayout.NORTH);
+        mainContainer.add(textContainer, BorderLayout.CENTER);
+        mainContainer.add(buttonPanel, BorderLayout.SOUTH);
+        
+        add(mainContainer, BorderLayout.CENTER);
     }
     
     private void closeTab() {
-        com.aiclient.ui.AiTabManager.getInstance(project).closeTab(this);
+        AiTabManager.getInstance(project).closeTab(this);
     }
     
     private void copyToClipboard(String text) {
@@ -124,27 +109,21 @@ public class LinkedInPostPanel extends JPanel {
     
     private void openLinkedIn(String text) {
         try {
-            // 1. Copy FULL text to Clipboard
             StringSelection selection = new StringSelection(text);
             com.intellij.openapi.ide.CopyPasteManager.getInstance().setContents(selection);
             
-            // 2. Open LinkedIn Feed (Share Modal)
             BrowserUtil.browse("https://www.linkedin.com/feed/?shareActive=true");
             
-            // 3. Auto-Paste Magic (Pure Java Robot)
             new Thread(() -> {
                 try {
-                    // Give browser time to focus and load (3 secs is usually enough)
                     Thread.sleep(3000);
                     
                     Robot robot = new Robot();
-                    robot.setAutoDelay(100); // Slower, more reliable typing
+                    robot.setAutoDelay(100);
                     
-                    // Determine modifier (Cmd for Mac, Ctrl for others)
                     boolean isMac = System.getProperty("os.name").toLowerCase().contains("mac");
                     int mod = isMac ? KeyEvent.VK_META : KeyEvent.VK_CONTROL;
                     
-                    // Simulate Paste with deliberate delays
                     robot.keyPress(mod);
                     Thread.sleep(100);
                     robot.keyPress(KeyEvent.VK_V);
@@ -159,47 +138,11 @@ public class LinkedInPostPanel extends JPanel {
             }).start();
             
             Messages.showInfoMessage(project, 
-                "<html>Opening LinkedIn...<br><b>Auto-Pasting in 3 seconds...</b><br><i>(Note: IntelliJ needs Accessibility permission on Mac)</i></html>", 
+                "<html>Opening LinkedIn...<br><b>Auto-Pasting in 3 seconds...</b></html>", 
                 "LinkedIn Ready");
                 
         } catch (Exception e) {
-            Messages.showWarningDialog(project, "Error opening LinkedIn: " + e.getMessage(), "Error");
-        }
-    }
-    
-    /**
-     * Custom Outlined Button (Same as CodeDiffPanel)
-     */
-    private static class OutlinedButton extends JButton {
-        private final Color accentColor;
-        
-        public OutlinedButton(String text, Color accentColor) {
-            super(text);
-            this.accentColor = accentColor;
-            setContentAreaFilled(false);
-            setFocusPainted(false);
-            setBorderPainted(false);
-            setForeground(accentColor);
-            setFont(getFont().deriveFont(Font.BOLD));
-            setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        }
-        
-        @Override
-        protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            
-            g2.setColor(accentColor);
-            g2.setStroke(new BasicStroke(1.5f));
-            g2.drawRoundRect(1, 1, getWidth() - 3, getHeight() - 3, 8, 8);
-            
-            if (getModel().isRollover()) {
-                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
-                g2.fillRoundRect(1, 1, getWidth() - 3, getHeight() - 3, 8, 8);
-            }
-            
-            g2.dispose();
-            super.paintComponent(g);
+            Messages.showWarningDialog(project, "Error: " + e.getMessage(), "Error");
         }
     }
 }

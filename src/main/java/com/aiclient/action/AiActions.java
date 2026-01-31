@@ -247,20 +247,8 @@ class ImproveCodeAction extends AnAction {
     /**
      * Extracts code from AI response, looking for code blocks.
      */
-    private String extractCode(String response, String fallback) {
-        // Look for code block
-        int start = response.indexOf("```");
-        if (start == -1) return response.trim();
-        
-        // Skip language identifier if present (e.g., ```java)
-        int codeStart = response.indexOf('\n', start);
-        if (codeStart == -1) return response.trim();
-        codeStart++; // Move past newline
-        
-        int end = response.indexOf("```", codeStart);
-        if (end == -1) return response.substring(codeStart).trim();
-        
-        return response.substring(codeStart, end).trim();
+    private String extractCode(String response, String originalCode) {
+        return com.aiclient.util.CodeUtils.extractAndIndentCode(response, originalCode);
     }
 }
 

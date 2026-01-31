@@ -179,17 +179,7 @@ public class DetectErrorsAction extends AnAction {
     /**
      * Extracts code from AI response.
      */
-    public static String extractCode(String response, String fallback) {
-        int start = response.indexOf("```");
-        if (start == -1) return response.trim();
-
-        int codeStart = response.indexOf('\n', start);
-        if (codeStart == -1) return response.trim();
-        codeStart++;
-
-        int end = response.indexOf("```", codeStart);
-        if (end == -1) return response.substring(codeStart).trim();
-
-        return response.substring(codeStart, end).trim();
+    public static String extractCode(String response, String originalCode) {
+        return com.aiclient.util.CodeUtils.extractAndIndentCode(response, originalCode);
     }
 }

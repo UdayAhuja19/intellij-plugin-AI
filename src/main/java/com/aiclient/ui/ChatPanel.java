@@ -142,7 +142,7 @@ public class ChatPanel extends JPanel {
             }
         });
         
-        // Input wrapper with rounded border
+        // Input wrapper with rounded border and WHITE border
         JPanel inputWrapper = new JPanel(new BorderLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -150,13 +150,14 @@ public class ChatPanel extends JPanel {
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2.setColor(bgInput);
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
-                g2.setColor(borderLight);
-                g2.setStroke(new BasicStroke(1f));
+                g2.setColor(new Color(255, 255, 255, 180)); // White border
+                g2.setStroke(new BasicStroke(1.5f));
                 g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
                 g2.dispose();
             }
         };
         inputWrapper.setOpaque(false);
+        inputWrapper.setBorder(JBUI.Borders.empty(8, 12, 8, 8));
         
         JScrollPane inputScroll = new JBScrollPane(inputArea);
         inputScroll.setBorder(JBUI.Borders.empty());
@@ -192,10 +193,11 @@ public class ChatPanel extends JPanel {
         sendButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         sendButton.addActionListener(e -> sendMessage());
         
-        JPanel sendPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        // Send panel - vertically centered using GridBagLayout
+        JPanel sendPanel = new JPanel(new GridBagLayout());
         sendPanel.setOpaque(false);
-        sendPanel.setBorder(JBUI.Borders.empty(0, 4, 0, 8));
-        sendPanel.add(sendButton);
+        sendPanel.setBorder(JBUI.Borders.empty(0, 4, 0, 4));
+        sendPanel.add(sendButton); // GridBagLayout centers by default
         
         inputWrapper.add(inputScroll, BorderLayout.CENTER);
         inputWrapper.add(sendPanel, BorderLayout.EAST);

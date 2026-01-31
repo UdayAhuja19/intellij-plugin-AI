@@ -38,6 +38,10 @@ public class GenerateBlogPostAction extends AnAction {
         
         Format your response with these exact section headers (include the headers):
         
+        TITLE
+        [Write a creative, catchy blog post title based on what this code does - NOT the class name. 
+        Examples: "Building a Real-Time Chat Engine", "Mastering Async File Operations", "The Art of State Management"]
+        
         SUMMARY
         [Write 2-3 sentences explaining what this code does at a high level]
         
@@ -111,8 +115,11 @@ public class GenerateBlogPostAction extends AnAction {
                     
                     indicator.setText("Generating HTML...");
                     
-                    // Generate title from filename
-                    String title = generateTitle(fileName);
+                    // Extract creative title from AI response (fallback to filename-based title)
+                    String title = extractTitle(aiResponse);
+                    if (title == null || title.isBlank()) {
+                        title = generateTitle(fileName);
+                    }
                     
                     // Create blog post
                     BlogPostService blogService = new BlogPostService(project);
@@ -177,6 +184,34 @@ public class GenerateBlogPostAction extends AnAction {
             case "sh", "bash" -> "bash";
             default -> "java";
         };
+    }
+    
+    private String extractTitle(String response) {
+        if (response == null) return null;
+        
+        // Look for TITLE section
+        int start = response.indexOf("TITLE");
+        if (start == -1) return null;
+        
+        start += "TITLE".length();
+        int end = response.indexOf("\n\n", start); // Try to find double newline
+        if (end == -1) {
+            end = response.indexOf("SUMMARY", start); // Fallback to next section
+        }
+        if (end == -1) {
+            end = response.indexOf('\n', start + 10); // Fallback to single line if seemingly short
+        }
+        
+        if (end == -1 || end <= start) return null;
+        
+        String title = response.substring(start, end).trim();
+        
+        // Cleanup quotes if present
+        if (title.startsWith("\"") && title.endsWith("\"")) {
+            title = title.substring(1, title.length() - 1);
+        }
+        
+        return title;
     }
     
     private String generateTitle(String fileName) {
