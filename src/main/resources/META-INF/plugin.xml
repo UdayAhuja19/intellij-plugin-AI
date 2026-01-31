@@ -60,17 +60,13 @@
                     description="Ask AI to suggest improvements for the selected code"
                     icon="AllIcons.Actions.SuggestedRefactoringBulb"/>
             
-            <action id="AiClient.GenerateDocs"
-                    class="com.aiclient.action.GenerateDocsAction"
-                    text="Generate Documentation"
-                    description="Ask AI to generate documentation for the selected code"
-                    icon="AllIcons.FileTypes.Text"/>
+            <separator/>
             
-            <action id="AiClient.AskAboutCode"
-                    class="com.aiclient.action.AskAboutCodeAction"
-                    text="Ask About Code..."
-                    description="Ask a custom question about the selected code"
-                    icon="AllIcons.Actions.Find"/>
+            <action id="AiClient.GenerateBlogPost"
+                    class="com.aiclient.action.GenerateBlogPostAction"
+                    text="Generate Blog Post"
+                    description="Generate an HTML blog post documenting the selected code"
+                    icon="AllIcons.Actions.Edit"/>
             
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </group>

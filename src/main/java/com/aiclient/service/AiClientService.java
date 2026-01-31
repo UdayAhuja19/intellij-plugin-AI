@@ -241,7 +241,9 @@ public final class AiClientService {
                 // Build request with system prompt for code analysis
                 List<ChatMessage> messages = new ArrayList<>();
                 messages.add(new ChatMessage("system", 
-                    "You are an expert programming assistant. Analyze the provided code " +
+                    "You are an expert programming assistant. You must ONLY answer questions related to " +
+                    "software development, coding, or the current project. If the question is unrelated " +
+                    "to these topics, politely refuse to answer. Analyze the provided code " +
                     "and respond helpfully. Format code blocks with appropriate language tags."));
                 messages.add(new ChatMessage("user", 
                     prompt + "\n\n```\n" + code + "\n```"));
@@ -383,7 +385,14 @@ public final class AiClientService {
             systemPrompt = "You are a helpful AI programming assistant. You help developers " +
                           "understand, write, and improve code. Be concise but thorough.";
         }
-        messages.add(new ChatMessage("system", systemPrompt));
+        
+        // Enforce topic restrictions
+        String guardrails = " CRITICAL: You must ONLY answer questions related to software development, " +
+                           "coding, algorithms, or the current project. If the user asks about unrelated " +
+                           "topics (e.g., general knowledge, cooking, politics), politely refuse and " +
+                           "remind them you are a coding assistant.";
+                           
+        messages.add(new ChatMessage("system", systemPrompt + guardrails));
         
         // Add recent conversation history (limit to prevent token overflow)
         int startIndex = Math.max(0, conversationHistory.size() - MAX_HISTORY_SIZE);

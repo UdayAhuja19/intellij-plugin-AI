@@ -178,16 +178,100 @@ class ExplainCodeAction extends BaseAiAction {
 
 /**
  * Action to suggest improvements for selected code.
- * Analyzes code for performance, readability, and best practices.
+ * Opens a diff panel showing changes with apply button.
  */
-class ImproveCodeAction extends BaseAiAction {
-    public ImproveCodeAction() {
-        super(
-            "Improve Code",
-            "Please analyze this code and suggest improvements. Consider performance, " +
-            "readability, best practices, and potential bugs. Provide the improved code " +
-            "with explanations."
-        );
+class ImproveCodeAction extends AnAction {
+    
+    private static final String IMPROVE_PROMPT = """
+        Analyze this code and provide an improved version.
+        Focus on: performance, readability, best practices, and potential bugs.
+        
+        CRITICAL RULES:
+        - DO NOT change class names, method names, or variable names
+        - DO NOT change function signatures (parameters, return types)
+        - Keep the same overall structure
+        - Only improve the internal logic, patterns, and implementation
+        
+        IMPORTANT: Return ONLY the improved code wrapped in a code block.
+        Do not include explanations before or after the code block.
+        The code block should start with ``` and end with ```.
+        
+        Code to improve:
+        """;
+    
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
+    }
+    
+    @Override
+    public void update(@NotNull AnActionEvent e) {
+        Editor editor = e.getData(CommonDataKeys.EDITOR);
+        boolean hasSelection = editor != null && editor.getSelectionModel().hasSelection();
+        e.getPresentation().setEnabledAndVisible(hasSelection);
+    }
+    
+    @Override
+    public void actionPerformed(@NotNull AnActionEvent e) {
+        Project project = e.getProject();
+        if (project == null) return;
+        
+        Editor editor = e.getData(CommonDataKeys.EDITOR);
+        if (editor == null) return;
+        
+        String selectedText = editor.getSelectionModel().getSelectedText();
+        if (selectedText == null || selectedText.isBlank()) {
+            Messages.showWarningDialog(project, "Please select some code first.", "Improve Code");
+            return;
+        }
+        
+        AiClientService aiService = AiClientService.getInstance(project);
+        
+        ProgressManager.getInstance().run(new Task.Backgroundable(project, "Analyzing Code...", true) {
+            @Override
+            public void run(@NotNull ProgressIndicator indicator) {
+                indicator.setIndeterminate(true);
+                indicator.setText("Getting AI suggestions...");
+                
+                try {
+                    String response = aiService.askAboutCode(selectedText, IMPROVE_PROMPT).get();
+                    
+                    // Extract code from response
+                    String improvedCode = extractCode(response, selectedText);
+                    
+                    // Show diff panel on EDT
+                    ApplicationManager.getApplication().invokeLater(() -> {
+                        com.aiclient.ui.CodeDiffPanel diffPanel = 
+                            new com.aiclient.ui.CodeDiffPanel(project, editor, selectedText, improvedCode);
+                        diffPanel.show();
+                    });
+                    
+                } catch (Exception ex) {
+                    ApplicationManager.getApplication().invokeLater(() -> {
+                        Messages.showErrorDialog(project, "Error: " + ex.getMessage(), "Improve Code");
+                    });
+                }
+            }
+        });
+    }
+    
+    /**
+     * Extracts code from AI response, looking for code blocks.
+     */
+    private String extractCode(String response, String fallback) {
+        // Look for code block
+        int start = response.indexOf("```");
+        if (start == -1) return response.trim();
+        
+        // Skip language identifier if present (e.g., ```java)
+        int codeStart = response.indexOf('\n', start);
+        if (codeStart == -1) return response.trim();
+        codeStart++; // Move past newline
+        
+        int end = response.indexOf("```", codeStart);
+        if (end == -1) return response.substring(codeStart).trim();
+        
+        return response.substring(codeStart, end).trim();
     }
 }
 
