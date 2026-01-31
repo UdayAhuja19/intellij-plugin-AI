@@ -43,6 +43,7 @@ public class AiChatToolWindowFactory implements ToolWindowFactory, DumbAware {
         // Wrap the panel in a Content object
         ContentFactory contentFactory = ContentFactory.getInstance();
         Content content = contentFactory.createContent(chatPanel, "Chat", false);
+        content.setCloseable(false);
         
         // Add the content to the tool window
         toolWindow.getContentManager().addContent(content);

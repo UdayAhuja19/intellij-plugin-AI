@@ -239,11 +239,12 @@ class ImproveCodeAction extends AnAction {
                     // Extract code from response
                     String improvedCode = extractCode(response, selectedText);
                     
-                    // Show diff panel on EDT
+                    // Show diff panel in tool window tab
                     ApplicationManager.getApplication().invokeLater(() -> {
                         com.aiclient.ui.CodeDiffPanel diffPanel = 
                             new com.aiclient.ui.CodeDiffPanel(project, editor, selectedText, improvedCode);
-                        diffPanel.show();
+                        
+                        com.aiclient.ui.AiTabManager.getInstance(project).openTab("Improve Code", diffPanel);
                     });
                     
                 } catch (Exception ex) {

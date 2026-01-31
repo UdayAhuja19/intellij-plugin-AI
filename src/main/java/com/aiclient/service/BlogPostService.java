@@ -110,7 +110,8 @@ public class BlogPostService {
     private String generateHtml(String title, String content, String originalCode, String language) {
         // Parse content sections
         String summary = extractSection(content, "SUMMARY", "KEY FEATURES");
-        String keyFeatures = extractSection(content, "KEY FEATURES", "CODE");
+        // Fix: Stop Key Features at WALKTHROUGH, not CODE
+        String keyFeatures = extractSection(content, "KEY FEATURES", "WALKTHROUGH");
         String walkthrough = extractSection(content, "WALKTHROUGH", "IMPACT");
         String impact = extractSection(content, "IMPACT", null);
         
@@ -236,6 +237,9 @@ public class BlogPostService {
                     inList = true;
                 }
                 String content = trimmed.substring(1).trim();
+                // Skip empty list items
+                if (content.isEmpty()) continue;
+                
                 // Handle numbered sub-items like "1." or "2."
                 if (content.matches("^\\d+\\..*")) {
                     content = content.replaceFirst("^\\d+\\.\\s*", "");
