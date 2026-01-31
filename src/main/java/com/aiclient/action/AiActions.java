@@ -162,19 +162,7 @@ abstract class BaseAiAction extends AnAction {
 // Concrete Action Implementations
 // ============================================================================
 
-/**
- * Action to explain selected code.
- * Provides a detailed explanation of what the code does.
- */
-class ExplainCodeAction extends BaseAiAction {
-    public ExplainCodeAction() {
-        super(
-            "Explain Code",
-            "Please explain this code in detail. Describe what it does, how it works, " +
-            "and any important concepts or patterns used."
-        );
-    }
-}
+// ExplainCodeAction has been moved to its own file: ExplainCodeAction.java
 
 /**
  * Action to suggest improvements for selected code.

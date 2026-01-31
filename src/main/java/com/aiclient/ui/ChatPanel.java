@@ -327,13 +327,22 @@ public class ChatPanel extends JPanel {
     // Sending Messages
     // ========================================================================
     
+    public void handleUserMessage(String message) {
+        if (message == null || message.trim().isEmpty() || isProcessing) return;
+        processMessage(message.trim());
+    }
+    
     private void sendMessage() {
         String message = inputArea.getText().trim();
         if (message.isEmpty() || isProcessing) return;
         
+        inputArea.setText("");
+        processMessage(message);
+    }
+
+    private void processMessage(String message) {
         isProcessing = true;
         updateStatus(true);
-        inputArea.setText("");
         
         // Build context in background thread to avoid EDT issues
         CompletableFuture.supplyAsync(() -> buildFullMessage(message))

@@ -2,6 +2,7 @@ package com.aiclient.action;
 
 import com.aiclient.service.AiClientService;
 import com.aiclient.service.BlogPostService;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -26,6 +27,11 @@ import java.util.concurrent.CompletableFuture;
  */
 public class GenerateBlogPostAction extends AnAction {
     
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
+    }
+
     private static final String BLOG_PROMPT = """
         You are a technical writer creating a blog post about code.
         Analyze the following code and generate content for a blog post.

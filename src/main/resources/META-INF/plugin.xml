@@ -68,6 +68,12 @@
                     description="Generate an HTML blog post documenting the selected code"
                     icon="AllIcons.Actions.Edit"/>
             
+            <action id="AiClient.GenerateLinkedInPost"
+                    class="com.aiclient.action.GenerateLinkedInPostAction"
+                    text="Generate LinkedIn Post"
+                    description="Draft a professional LinkedIn post about this code"
+                    icon="AllIcons.ToolbarDecorator.Export"/>
+            
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </group>
         
