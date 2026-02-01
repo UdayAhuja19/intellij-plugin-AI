@@ -55,5 +55,5 @@ Select code and press `Ctrl+Alt+A` (or your mapped shortcut) to quickly ask Focu
 
 - **Run Tests**:
     ```bash
-    ./gradlew test
+    ./run.sh
     ```
