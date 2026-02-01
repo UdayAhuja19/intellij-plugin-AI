@@ -36,7 +36,7 @@ Select code and press `Ctrl+Alt+A` (or your mapped shortcut) to quickly ask Focu
 3.  **Run the IDE**:
     This will compile the plugin and start a sandbox instance of IntelliJ IDEA with FocusFlow installed.
     ```bash
-    ./gradlew runIde
+    ./run.sh
     ```
 
 ## Usage
